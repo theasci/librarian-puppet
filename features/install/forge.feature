@@ -149,3 +149,15 @@ Feature: cli/install/forge
     When I run `librarian-puppet install`
     Then the exit status should be 0
     And the file "modules/postgresql/Modulefile" should match /name *'puppetlabs-postgresql'/
+
+  Scenario: Source dependencies from Modulefile when no Puppetfile is present
+    Given a file named "Modulefile" with:
+    """
+    name "random name"
+    dependency "puppetlabs/stdlib", "2.2.1"
+    """
+    When I run `librarian-puppet install`
+    Then the exit status should be 0
+    And the file "Puppetfile" should not exist
+    And the file "modules/stdlib/Modulefile" should match /name *'puppetlabs-stdlib'/
+    And the file "modules/stdlib/Modulefile" should match /version *'2\.2\.1'/

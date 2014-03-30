@@ -20,13 +20,14 @@ release and the version bumped in your Puppetfile.
 
 ## The Puppetfile
 
-Every Puppet repository that uses Librarian-puppet will have a file named
-`Puppetfile` in the root directory of that repository.  The full specification
-for which modules your puppet infrastructure repository  depends goes in here.
+Every Puppet repository that uses Librarian-puppet may have a file named
+`Puppetfile` or `Modulefile` in the root directory of that repository.  The full specification
+for which modules your puppet infrastructure repository depends goes in here.
 
-### Simple Puppetfile
+### Simple usage
 
-This Puppetfile will download all the dependencies listed in your Modulefile from the Puppet Forge
+If no Puppetfile is present, `librarian-puppet` will download all the dependencies
+listed in your Modulefile from the Puppet Forge, as if the Puppetfile contained
 
     forge "http://forge.puppetlabs.com"
 

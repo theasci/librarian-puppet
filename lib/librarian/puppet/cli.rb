@@ -46,8 +46,8 @@ module Librarian
       option "local", :type => :boolean, :default => false
       def install
 
-        unless File.exist?('Puppetfile')
-          say "Could not find Puppetfile in #{Dir.pwd}", :red
+        if !File.exist?('Puppetfile') && !File.exist?('Modulefile')
+          say "Could not find Puppetfile nor Modulefile in #{Dir.pwd}", :red
           exit 1
         end
 

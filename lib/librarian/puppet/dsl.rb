@@ -17,6 +17,14 @@ module Librarian
       def run(specfile = nil, sources = [])
         specfile, sources = nil, specfile if specfile.kind_of?(Array) && sources.empty?
 
+        if specfile.kind_of?(Pathname) and !File.exists?(specfile)
+          debug { "Specfile not found, using defaults: #{specfile}" }
+          specfile = Proc.new do
+            forge "http://forge.puppetlabs.com"
+            modulefile
+          end
+        end
+
         Target.new(self).tap do |target|
           target.precache_sources(sources)
           debug_named_source_cache("Pre-Cached Sources", target)
@@ -40,7 +48,8 @@ module Librarian
 
         # implement the 'modulefile' syntax for Puppetfile
         def modulefile
-          File.read(Pathname.new(specfile).parent.join('Modulefile')).lines.each do |line|
+          path = specfile.kind_of?(Pathname) ? specfile.parent : Pathname.new(Dir.pwd)
+          File.read(path.join('Modulefile')).lines.each do |line|
             regexp = /\s*dependency\s+('|")([^'"]+)\1\s*(?:,\s*('|")([^'"]+)\3)?/
             regexp =~ line && mod($2, $4)
           end

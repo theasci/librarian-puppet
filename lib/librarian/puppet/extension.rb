@@ -80,6 +80,10 @@ module Librarian
       def destructive?
         environment.config_db.local['destructive'] == 'true'
       end
+
+      def check_specfile
+        # don't fail if Puppetfile doesn't exist as we'll use the Modulefile
+      end
     end
   end
 
